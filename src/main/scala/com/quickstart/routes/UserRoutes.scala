@@ -8,6 +8,7 @@ import akka.actor.typed.scaladsl.AskPattern._
 import akka.actor.typed.{ ActorRef, ActorSystem }
 import akka.util.Timeout
 
+import com.quickstart.Authentication
 import com.quickstart.core.users.{ User, PatchUser }
 import com.quickstart.core.users.UserRegistry
 import com.quickstart.core.users.UserRegistry.CreateUser
@@ -25,7 +26,7 @@ class UserRoutes(
     implicit val system: ActorSystem[_],
     timeout: Timeout
   )
-  extends JsonFormats {
+  extends JsonFormats with Authentication {
 
 
   def createUser(user: User): Future[User] = userRegistry.ask(CreateUser(user, _))
@@ -37,36 +38,38 @@ class UserRoutes(
   def deleteUser(name: String): Future[Unit] = userRegistry.ask(DeleteUser(name, _))
 
   val userRoutes: Route = pathPrefix("users") {
-    concat(
-      post {
-        entity(as[User]){ newUser =>
-          onSuccess(createUser(newUser)) { user =>
-            complete(StatusCodes.Created, user)
+    authenticate { authUser =>
+      concat(
+        post {
+          entity(as[User]){ newUser =>
+            onSuccess(createUser(newUser)) { user =>
+              complete(StatusCodes.Created, user)
+            }
           }
-        }
-      },
-      get {
-        onSuccess(getUsers) { users =>
-          complete(users)
-        }
-      },
-      path(Segment) { userName =>
-        concat(
-          put {
-            entity(as[PatchUser]){ userToUpdate =>
-              val user = User(userName, userToUpdate.age, userToUpdate.countryOfResidence)
-              onSuccess(updateUser(user)) { patchedUser =>
-                complete(patchedUser)
+        },
+        get {
+          onSuccess(getUsers) { users =>
+            complete(users)
+          }
+        },
+        path(Segment) { userName =>
+          concat(
+            put {
+              entity(as[PatchUser]){ userToUpdate =>
+                val user = User(userName, userToUpdate.age, userToUpdate.countryOfResidence)
+                onSuccess(updateUser(user)) { patchedUser =>
+                  complete(patchedUser)
+                }
+              }
+            },
+            delete {
+              onSuccess(deleteUser(userName)) {
+                complete(StatusCodes.NoContent)
               }
             }
-          },
-          delete {
-            onSuccess(deleteUser(userName)) {
-              complete(StatusCodes.NoContent)
-            }
-          }
-        )
-      }
-    )
+          )
+        }
+      )
+    }
   }
 }

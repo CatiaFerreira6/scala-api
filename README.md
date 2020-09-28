@@ -73,7 +73,25 @@ In order to create a user we need to do several things, starting with the interf
 - We need to link that route with the service for deleting a user
 - We need the service to call the storage layer for persisting the new user
 
+# Step 3
+
+## Authentication
+
+The easiest way to use authentication is by using the directives provided by Akka Http.
+
+Let's create an `Authentication.scala` file in the quickstart folder.
+
+In this file we shall create an Authentication trait that will be used by every route aggregator we'll have.
+
+This trait shall have an `authenticate` directive that will make use of the `authenticateBasic` directive of Akka Http
+
+`authenticate` will call on another function of our creation, aptly named `passwordAuthenticator`.
+
+This function will return the username of the authenticated user if the Basic Authentication provided has a password of value `password`
+
 
 ## Run project
 
 `sbt run`
+
+If you want to keep it listening for changes you can use `~reStart` inside the `sbt` shell
