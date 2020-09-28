@@ -57,12 +57,21 @@ In order to create a user we need to do several things, starting with the interf
 
 ### Get Users
 
+- We need to open a route for getting the users
+- We need to link that route with the service for getting the users
+- We need the service to call the storage layer to get the users
 
 ### Update user
 
+- We need to open a route for updating a User
+- We need to link that route with the service for updating a user
+- We need the service to call the storage layer for persisting the new user
 
 ### Delete user
 
+- We need to open a route for deleting a User
+- We need to link that route with the service for deleting a user
+- We need the service to call the storage layer for persisting the new user
 
 
 ## Run project
