@@ -13,6 +13,8 @@ object UserRegistry {
 
   final case class UpdateUser(user: User, replyTo: ActorRef[User]) extends Command
 
+  final case class DeleteUser(userName: String, replyTo: ActorRef[Unit]) extends Command
+
 }
 
 class UserRegistry(userStorage: UserStorage){
@@ -32,6 +34,11 @@ class UserRegistry(userStorage: UserStorage){
       case UpdateUser(user, replyTo) =>
         userStorage.updateUser(user)
         replyTo ! user
+        Behaviors.same
+
+      case DeleteUser(name, replyTo) =>
+        userStorage.deleteUser(name)
+        replyTo ! ()
         Behaviors.same
     }
 }

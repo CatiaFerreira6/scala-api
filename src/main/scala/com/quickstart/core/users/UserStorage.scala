@@ -13,4 +13,8 @@ class UserStorage {
   def updateUser(user: User): ListBuffer[User] = {
     users.map(usr => if(usr.name == user.name) {user} else usr)
   }
+
+  def deleteUser(name: String): Unit = {
+    users = users.filterNot(_.name == name)
+  }
 }

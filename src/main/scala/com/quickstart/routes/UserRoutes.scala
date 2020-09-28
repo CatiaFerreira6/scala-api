@@ -13,6 +13,7 @@ import com.quickstart.core.users.UserRegistry
 import com.quickstart.core.users.UserRegistry.CreateUser
 import com.quickstart.core.users.UserRegistry.GetUsers
 import com.quickstart.core.users.UserRegistry.UpdateUser
+import com.quickstart.core.users.UserRegistry.DeleteUser
 import com.quickstart.JsonFormats
 
 import scala.concurrent.Future
@@ -33,6 +34,8 @@ class UserRoutes(
 
   def updateUser(user: User): Future[User] = userRegistry.ask(UpdateUser(user, _))
 
+  def deleteUser(name: String): Future[Unit] = userRegistry.ask(DeleteUser(name, _))
+
   val userRoutes: Route = pathPrefix("users") {
     concat(
       post {
@@ -48,14 +51,21 @@ class UserRoutes(
         }
       },
       path(Segment) { userName =>
-        put {
-          entity(as[PatchUser]){ userToUpdate =>
-            val user = User(userName, userToUpdate.age, userToUpdate.countryOfResidence)
-            onSuccess(updateUser(user)) { patchedUser =>
-              complete(patchedUser)
+        concat(
+          put {
+            entity(as[PatchUser]){ userToUpdate =>
+              val user = User(userName, userToUpdate.age, userToUpdate.countryOfResidence)
+              onSuccess(updateUser(user)) { patchedUser =>
+                complete(patchedUser)
+              }
+            }
+          },
+          delete {
+            onSuccess(deleteUser(userName)) {
+              complete(StatusCodes.NoContent)
             }
           }
-        }
+        )
       }
     )
   }
