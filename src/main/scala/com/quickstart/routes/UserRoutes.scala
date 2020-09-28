@@ -4,11 +4,16 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 
+import akka.actor.typed.scaladsl.AskPattern._
 import akka.actor.typed.{ ActorRef, ActorSystem }
 import akka.util.Timeout
 
+import com.quickstart.core.users.User
 import com.quickstart.core.users.UserRegistry
+import com.quickstart.core.users.UserRegistry.CreateUser
 import com.quickstart.JsonFormats
+
+import scala.concurrent.Future
 
 
 class UserRoutes(
@@ -19,7 +24,16 @@ class UserRoutes(
   )
   extends JsonFormats {
 
+
+  def createUser(user: User): Future[User] = userRegistry.ask(CreateUser(user, _))
+
   val userRoutes: Route = pathPrefix("users") {
-    complete(StatusCodes.NotFound)
+    post {
+      entity(as[User]){ newUser =>
+        onSuccess(createUser(newUser)) { user =>
+          complete(StatusCodes.Created, user)
+        }
+      }
+    }
   }
 }

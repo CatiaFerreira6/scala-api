@@ -47,6 +47,24 @@ Within the `routes` folder you will find all the code that is related to the int
 
 ## Create endpoints and logic for CRUD operations
 
+### Create User
+
+In order to create a user we need to do several things, starting with the interface layer.
+
+- We need to open a route for creating a User
+- We need to link that route with the service for creating a user
+- We need the service to call the storage layer for persisting the new user
+
+### Get Users
+
+
+### Update user
+
+
+### Delete user
+
+
+
 ## Run project
 
 `sbt run`

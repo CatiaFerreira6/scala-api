@@ -7,10 +7,18 @@ object UserRegistry {
 
   sealed trait Command
 
+  final case class CreateUser(user: User, replyTo: ActorRef[User]) extends Command
+
 }
 
 class UserRegistry(userStorage: UserStorage){
   import UserRegistry._
 
-  def register(): Behavior[Command] = Behaviors.empty
+  def register(): Behavior[Command] =
+    Behaviors.receiveMessage {
+      case CreateUser(newUser, replyTo) =>
+        userStorage.addUser(newUser)
+        replyTo ! newUser
+        Behaviors.same
+    }
 }
