@@ -11,6 +11,8 @@ object UserRegistry {
 
   final case class GetUsers(replyTo: ActorRef[List[User]]) extends Command
 
+  final case class UpdateUser(user: User, replyTo: ActorRef[User]) extends Command
+
 }
 
 class UserRegistry(userStorage: UserStorage){
@@ -25,6 +27,11 @@ class UserRegistry(userStorage: UserStorage){
 
       case GetUsers(replyTo) =>
         replyTo ! userStorage.getUsers
+        Behaviors.same
+
+      case UpdateUser(user, replyTo) =>
+        userStorage.updateUser(user)
+        replyTo ! user
         Behaviors.same
     }
 }
