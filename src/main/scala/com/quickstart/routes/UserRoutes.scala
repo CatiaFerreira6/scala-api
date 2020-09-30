@@ -18,15 +18,8 @@ import com.quickstart.JsonFormats
 
 import scala.concurrent.Future
 
-
-class UserRoutes(
-    userRegistry: ActorRef[UserRegistry.Command]
-  )(
-    implicit val system: ActorSystem[_],
-    timeout: Timeout
-  )
+class UserRoutes(userRegistry: ActorRef[UserRegistry.Command])(implicit val system: ActorSystem[_], timeout: Timeout)
   extends JsonFormats {
-
 
   def createUser(user: User): Future[User] = userRegistry.ask(CreateUser(user, _))
 

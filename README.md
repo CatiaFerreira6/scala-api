@@ -4,7 +4,7 @@
 
 ## Setup environment
 
-- Go to https://github.com/CatiaFerreira6/scala-api.git and install sbt
+- Go to https://www.scala-sbt.org/download.html and install sbt
   - If on Mac `brew install sbt` should do
 
 # Step 1
@@ -73,7 +73,8 @@ In order to create a user we need to do several things, starting with the interf
 - We need to link that route with the service for deleting a user
 - We need the service to call the storage layer for persisting the new user
 
+We can now run the project using `sbt` and when in the shell running `reStart`
 
-## Run project
+# Step 3
 
-`sbt run`
+Checkout branch step3 of this repo and follow the README.md
