@@ -4,7 +4,7 @@
 
 ## Setup environment
 
-- Go to https://github.com/CatiaFerreira6/scala-api.git and install sbt
+- Go to https://www.scala-sbt.org/download.html and install sbt
   - If on Mac `brew install sbt` should do
 
 # Step 1
@@ -27,7 +27,7 @@ In plugins.sbt we're going to specify the plugins we want to have in sbt for thi
 
 Both of these folders will then have `resources` and `scala` directories within them
 
-The `resources` folder is the home for the configuration files and some times for the migration files
+The `resources` folder is the home for the configuration files and sometimes for the migration files
 
 The `scala` folder is the home for the Scala code you're going to be building
 
@@ -47,6 +47,4 @@ Within the `routes` folder you will find all the code that is related to the int
 
 ## Create endpoints and logic for CRUD operations
 
-## Run project
-
-`sbt run`
+Checkout branch step2 of this repo and follow the README.md
