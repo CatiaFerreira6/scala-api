@@ -4,7 +4,7 @@
 
 ## Setup environment
 
-- Go to https://github.com/CatiaFerreira6/scala-api.git and install sbt
+- Go to https://www.scala-sbt.org/download.html and install sbt
   - If on Mac `brew install sbt` should do
 
 # Step 1
